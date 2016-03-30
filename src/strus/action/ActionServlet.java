@@ -1,28 +1,27 @@
-package mvc;
+package strus.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mvc.form.LoginForm;
-import mvc.form.SocialPension;
-import mvc.form.SuperForm;
+import service.voMessage.ViewObject;
 
-import Action.Action;
-import Action.LoginAction;
-import Action.SocialPensionAction;
-import Util.InterpretBean;
+public class ActionServlet extends HttpServlet {
 
-public class ServletAction extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7597280557618665906L;
 
 	/**
 	 * Constructor of the object.
 	 */
-	public ServletAction() {
+	public ActionServlet() {
 		super();
 	}
 
@@ -47,29 +46,22 @@ public class ServletAction extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		Action action = null;
-
-//		String value = request.getParameter("sign");
-		SuperForm superForm = (SuperForm) InterpretBean
-				.interpret(request);
-		
-		if (request.getParameter("sign").equals("mvc.form.LoginForm")) {
-			action = new LoginAction();
+		ViewObject vo = new ViewObject();
+		String url = "";
+		String value = request.getParameter("text");
+		if (value.equals("Derek")) {
+			vo.setAddress("message");
+			vo.setMessage1("Welcome, Derek");
+			url = "/view/success.jsp";
+		}else{
+			vo.setAddress("message");
+			vo.setMessage1("this user is invalid");
+			url = "/view/Failure.jsp";
 		}
-		
-		if(request.getParameter("sign").equals("mvc.form.SocialPension")) {
-			action = new SocialPensionAction();
-		}
-		
-		String result = action.execute(superForm);
-		
-		PrintWriter out = response.getWriter();
-		out.print(result);
-		out.flush();
-		out.close();
-		
-//	    System.out.println(SuperForm);
-		
+		request.setAttribute("output", vo);
+		RequestDispatcher reqDispatch = request.getRequestDispatcher(url);
+		reqDispatch.forward(request, response);
+	
 	}
 
 	/**
@@ -88,5 +80,13 @@ public class ServletAction extends HttpServlet {
 		this.doGet(request, response);
 	}
 
+	/**
+	 * Initialization of the servlet. <br>
+	 *
+	 * @throws ServletException if an error occurs
+	 */
+	public void init() throws ServletException {
+		// Put your code here
+	}
 
 }
