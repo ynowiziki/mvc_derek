@@ -2,6 +2,7 @@ package strus.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,7 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import business.ActionDetermination;
 import service.voMessage.ViewObject;
+import strus.Form.ActionForm;
+import strus.Form.InterpretBean;
+import strus.Form.xmlBean;
 
 public class ActionServlet extends HttpServlet {
 
@@ -46,22 +51,25 @@ public class ActionServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		ViewObject vo = new ViewObject();
-		String url = "";
-		String value = request.getParameter("text");
-		if (value.equals("Derek")) {
-			vo.setAddress("message");
-			vo.setMessage1("Welcome, Derek");
-			url = "/view/success.jsp";
-		}else{
-			vo.setAddress("message");
-			vo.setMessage1("this user is invalid");
-			url = "/view/Failure.jsp";
+		String path = this.getPath(request.getServletPath());
+		Map<String, xmlBean> xmlObj = (Map<String, xmlBean>) this.getServletContext().getAttribute("strus-config");
+		xmlBean xmlBeanObj = xmlObj.get(path);
+		ActionForm actionForm = InterpretBean.getForm(xmlBeanObj.getFormClass(), request);
+		
+		try {
+			Class actionClass = Class.forName(xmlBeanObj.getActionClass());
+			Action action = (Action) actionClass.newInstance();
+			String resultPath = action.execute(request, actionForm, xmlBeanObj.getActionForward());
+			if (resultPath != null && !"".equals(resultPath)) {
+				request.getRequestDispatcher(resultPath).forward(request, response);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		request.setAttribute("output", vo);
-		RequestDispatcher reqDispatch = request.getRequestDispatcher(url);
-		reqDispatch.forward(request, response);
-	
 	}
 
 	/**
@@ -87,6 +95,11 @@ public class ActionServlet extends HttpServlet {
 	 */
 	public void init() throws ServletException {
 		// Put your code here
+	}
+	
+	private String getPath(String servletPath) {
+		return servletPath.split("\\.")[0];
+		
 	}
 
 }
