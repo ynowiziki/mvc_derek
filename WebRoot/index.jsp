@@ -14,9 +14,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <form action="<%=request.getContextPath() %>/init.do" method="post">
-      <input type="text" name="text">
-      <inout type="submit">
+  
+    <form action="<%=request.getContextPath()%>/sss.do" method="post">
+    
+    	name:<input type="text" name="name"/>
+    	pass:<input type="text" name="pass"/>
+    	<input type="submit" value="提交">
+    
     </form>
   </body>
 </html>

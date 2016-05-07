@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ page import="service.voMessage.ViewObject" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -16,14 +15,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <%
-       ViewObject vo = (ViewObject)request.getAttribute("output");
-     %>
-      <table border="2" width="85%">
-        <tr>
-          <td><%= vo.getAddress() %> </td> <td><%=vo.getMessage1() %> </td>
-        </tr>
-  
-      </table>
+    Success<br>
   </body>
 </html>

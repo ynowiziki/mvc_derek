@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import business.ActionDetermination;
-import service.voMessage.ViewObject;
 import strus.Form.ActionForm;
+import strus.Form.AnotationBean;
 import strus.Form.InterpretBean;
-import strus.Form.xmlBean;
+
 
 public class ActionServlet extends HttpServlet {
 
@@ -52,8 +51,8 @@ public class ActionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String path = this.getPath(request.getServletPath());
-		Map<String, xmlBean> xmlObj = (Map<String, xmlBean>) this.getServletContext().getAttribute("strus-config");
-		xmlBean xmlBeanObj = xmlObj.get(path);
+		Map<String, AnotationBean> xmlObj = (Map<String, AnotationBean>) this.getServletContext().getAttribute("annotationPath");
+		AnotationBean xmlBeanObj = xmlObj.get(path);
 		ActionForm actionForm = InterpretBean.getForm(xmlBeanObj.getFormClass(), request);
 		
 		try {

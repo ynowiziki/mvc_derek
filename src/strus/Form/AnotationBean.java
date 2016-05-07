@@ -3,19 +3,18 @@ package strus.Form;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class xmlBean {
+public class AnotationBean {	
 	
-	public xmlBean() {
+	public AnotationBean(){
 		
 	}
-	
 	private String beanName = "";
 	private String path = "";
 	private String actionType = "";
 	private String actionClass = "";
 	private String formClass = "";
 	private Map<String, String> actionForward = new HashMap<String, String>();
+	
 	public String getBeanName() {
 		return beanName;
 	}
@@ -53,5 +52,4 @@ public class xmlBean {
 		this.actionForward = actionForward;
 	}
 	
-
 }
